@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'br.com.laboon'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+apply plugin: 'java'
+
+repositories {
+    maven { url = uri("https://hub.spigotmc.org/nexus/content/groups/public") }
+    maven { url "http://repo.dmulloy2.net/nexus/repository/public/" }
+    maven { url "https://repo.battlebits.com.br/repository/public/" }
+    maven { url "https://papermc.io/repo/repository/maven-public/" }
+    mavenLocal()
+}
+
+dependencies {
+    compile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.12.2-R0.1-SNAPSHOT'
+    compile group: 'br.com.battlebits', name: 'commons-bukkit', version: '1.0.187-SNAPSHOT'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+processResources {
+    def fullVersion = version
+    if (System.getenv('BUILD_NUMBER')) {
+        fullVersion = version + '-' + System.getenv('BUILD_NUMBER')
+    }
+    filesMatching('plugin.yml') {
+        expand(["fullVersion":fullVersion])
+    }
+
+}
+
+sourceSets {
+    main.java.srcDir "src/main/java"
+    main.resources.srcDir "src/main/resources"
+    test.java.srcDir "src/test/java"
+    test.resources.srcDir "src/test/resources"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+			artifact("build/libs/Laboon-SkyWars-$version"+".jar"){
+				extension 'jar'
+			}
+        }
+    }
+    repositories {
+        maven {
+			name 'nexus'
+            url = version.endsWith('SNAPSHOT') ? 'http://localhost:8081/repository/maven-snapshots/':'http://localhost:8081/repository/maven-releases/'
+            credentials {
+                username project.repoUser
+                password project.repoPassword
+            }
+        }
+    }
+}
