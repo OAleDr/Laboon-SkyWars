@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.12.2-R0.1-SNAPSHOT'
-    compile group: 'br.com.battlebits', name: 'commons-bukkit', version: '1.0.187-SNAPSHOT'
+    compile group: 'br.com.battlebits', name: 'commons-bukkit', version: '1.1.0-SNAPSHOT'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
@@ -53,7 +53,8 @@ publishing {
     repositories {
         maven {
 			name 'nexus'
-            url = version.endsWith('SNAPSHOT') ? 'http://localhost:8081/repository/maven-snapshots/':'http://localhost:8081/repository/maven-releases/'
+            url = version.endsWith('SNAPSHOT') ? 'https://35.199.94.199:8081/repository/maven-snapshots/':
+                    'https://35.199.94.199:8081/repository/maven-releases/'
             credentials {
                 username project.repoUser
                 password project.repoPassword
